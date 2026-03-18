@@ -24,7 +24,7 @@
       }
 
       .card {
-        width: min(760px, 100%);
+        width: min(920px, 100%);
         padding: 56px 42px;
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 28px;
@@ -95,6 +95,58 @@
         transform: translateY(0);
       }
 
+      .feed-section {
+        margin-top: 38px;
+        padding-top: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left;
+      }
+
+      .feed-title {
+        margin: 0 0 8px;
+        font-size: 14px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #c6a978;
+      }
+
+      .feed-subtitle {
+        margin: 0 0 18px;
+        font-size: 14px;
+        color: rgba(245, 239, 227, 0.68);
+      }
+
+      .tweet-box {
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.02);
+        padding: 22px;
+        min-height: 160px;
+      }
+
+      .tweet-text {
+        margin: 0;
+        font-size: 20px;
+        line-height: 1.7;
+        color: #f7f0e6;
+        white-space: pre-wrap;
+      }
+
+      .tweet-meta {
+        margin-top: 14px;
+        font-size: 13px;
+        color: rgba(245, 239, 227, 0.55);
+      }
+
+      .tweet-link {
+        color: #c6a978;
+        text-decoration: none;
+      }
+
+      .tweet-link:hover {
+        text-decoration: underline;
+      }
+
       .footer-note {
         margin-top: 18px;
         font-size: 12px;
@@ -110,6 +162,10 @@
         #quote {
           line-height: 1.45;
         }
+
+        .tweet-text {
+          font-size: 18px;
+        }
       }
     </style>
   </head>
@@ -121,6 +177,16 @@
       <p id="quote"></p>
       <p id="author">— Fyodor Dostoevsky</p>
       <button id="newQuoteBtn">Another quote</button>
+
+      <section class="feed-section">
+        <p class="feed-title">Latest from X</p>
+        <p class="feed-subtitle">Most recent post from @nntaleb</p>
+        <div class="tweet-box">
+          <p class="tweet-text" id="tweetText">Loading latest post...</p>
+          <div class="tweet-meta" id="tweetMeta"></div>
+        </div>
+      </section>
+
       <p class="footer-note">A quiet corner for restless thoughts.</p>
     </main>
 
@@ -138,14 +204,43 @@
 
       const quoteEl = document.getElementById("quote");
       const buttonEl = document.getElementById("newQuoteBtn");
+      const tweetTextEl = document.getElementById("tweetText");
+      const tweetMetaEl = document.getElementById("tweetMeta");
 
       function showRandomQuote() {
         const randomIndex = Math.floor(Math.random() * quotes.length);
         quoteEl.textContent = `“${quotes[randomIndex]}”`;
       }
 
+      async function loadLatestTweet() {
+        try {
+          const res = await fetch("/api/latest-taleb");
+          if (!res.ok) throw new Error("Failed to load post");
+
+          const data = await res.json();
+
+          tweetTextEl.textContent = data.text || "No recent post found.";
+
+          if (data.url) {
+            tweetMetaEl.innerHTML = `
+              <span>${data.created_at ? new Date(data.created_at).toLocaleString() : ""}</span>
+              ${data.created_at ? " · " : ""}
+              <a class="tweet-link" href="${data.url}" target="_blank" rel="noopener noreferrer">Open on X</a>
+            `;
+          } else {
+            tweetMetaEl.textContent = data.created_at
+              ? new Date(data.created_at).toLocaleString()
+              : "";
+          }
+        } catch (err) {
+          tweetTextEl.textContent = "Could not load the latest post right now.";
+          tweetMetaEl.textContent = "";
+        }
+      }
+
       buttonEl.addEventListener("click", showRandomQuote);
       showRandomQuote();
+      loadLatestTweet();
     </script>
   </body>
 </html>
