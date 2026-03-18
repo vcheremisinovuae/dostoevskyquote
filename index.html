@@ -138,6 +138,63 @@
 
       
 
+      .news-section {
+        margin-top: 38px;
+        padding-top: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left;
+      }
+
+      .section-title {
+        margin: 0 0 8px;
+        font-size: 14px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #c6a978;
+      }
+
+      .section-subtitle {
+        margin: 0 0 18px;
+        font-size: 14px;
+        color: rgba(245, 239, 227, 0.68);
+      }
+
+      .news-card {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.02);
+        padding: 22px;
+        border-radius: 18px;
+      }
+
+      .news-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .news-item + .news-item {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .news-link {
+        color: #f7f0e6;
+        text-decoration: none;
+        font-size: 18px;
+        line-height: 1.45;
+      }
+
+      .news-link:hover {
+        color: #c6a978;
+      }
+
+      .news-meta {
+        margin-top: 6px;
+        font-size: 12px;
+        color: rgba(245, 239, 227, 0.55);
+      }
+
       .footer-note {
         margin-top: 18px;
         font-size: 12px;
@@ -168,8 +225,8 @@
       <button id="newQuoteBtn">Another quote</button>
 
       <section class="price-section">
-        <p class="feed-title">Live crypto</p>
-        <p class="feed-subtitle">Current KASPA price</p>
+        <p class="section-title">Live crypto</p>
+        <p class="section-subtitle">Current KASPA price</p>
         <div class="price-card">
           <p class="price-label">KAS / USD</p>
           <p class="price-value" id="kaspaPrice">Loading...</p>
@@ -178,6 +235,16 @@
       </section>
 
       
+
+      <section class="news-section">
+        <p class="section-title">RBC news</p>
+        <p class="section-subtitle">Top 10 latest headlines from RBC</p>
+        <div class="news-card">
+          <ul class="news-list" id="rbcNewsList">
+            <li class="news-item">Loading latest news...</li>
+          </ul>
+        </div>
+      </section>
 
       <p class="footer-note">A quiet corner for restless thoughts.</p>
     </main>
@@ -198,6 +265,7 @@
       const buttonEl = document.getElementById("newQuoteBtn");
       const kaspaPriceEl = document.getElementById("kaspaPrice");
       const kaspaMetaEl = document.getElementById("kaspaMeta");
+      const rbcNewsListEl = document.getElementById("rbcNewsList");
 
       function showRandomQuote() {
         const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -241,10 +309,36 @@
         }
       }
 
+      async function loadRbcNews() {
+        try {
+          const response = await fetch("/api/rbc-news");
+          if (!response.ok) {
+            throw new Error("News request failed");
+          }
+
+          const items = await response.json();
+
+          if (!Array.isArray(items) || !items.length) {
+            throw new Error("No news available");
+          }
+
+          rbcNewsListEl.innerHTML = items.map((item) => `
+            <li class="news-item">
+              <a class="news-link" href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+              <div class="news-meta">${item.pubDate ? new Date(item.pubDate).toLocaleString() : "RBC"}</div>
+            </li>
+          `).join("");
+        } catch (error) {
+          rbcNewsListEl.innerHTML = '<li class="news-item">Could not load RBC news right now.</li>';
+        }
+      }
+
       buttonEl.addEventListener("click", showRandomQuote);
       showRandomQuote();
       loadKaspaPrice();
+      loadRbcNews();
       setInterval(loadKaspaPrice, 60000);
+      setInterval(loadRbcNews, 300000);
     </script>
     
   </body>
