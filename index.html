@@ -121,31 +121,15 @@
         border: 1px solid rgba(255, 255, 255, 0.08);
         background: rgba(255, 255, 255, 0.02);
         padding: 22px;
-        min-height: 160px;
+        min-height: 420px;
+        overflow: hidden;
       }
 
-      .tweet-text {
-        margin: 0;
-        font-size: 20px;
-        line-height: 1.7;
-        color: #f7f0e6;
-        white-space: pre-wrap;
-      }
+      
 
-      .tweet-meta {
-        margin-top: 14px;
-        font-size: 13px;
-        color: rgba(245, 239, 227, 0.55);
-      }
+      
 
-      .tweet-link {
-        color: #c6a978;
-        text-decoration: none;
-      }
-
-      .tweet-link:hover {
-        text-decoration: underline;
-      }
+      
 
       .footer-note {
         margin-top: 18px;
@@ -180,10 +164,17 @@
 
       <section class="feed-section">
         <p class="feed-title">Latest from X</p>
-        <p class="feed-subtitle">Most recent post from @nntaleb</p>
+        <p class="feed-subtitle">Live timeline from @nntaleb</p>
         <div class="tweet-box">
-          <p class="tweet-text" id="tweetText">Loading latest post...</p>
-          <div class="tweet-meta" id="tweetMeta"></div>
+          <a
+            class="twitter-timeline"
+            data-theme="dark"
+            data-height="420"
+            data-chrome="noheader nofooter"
+            href="https://x.com/nntaleb"
+          >
+            Posts by @nntaleb
+          </a>
         </div>
       </section>
 
@@ -204,20 +195,11 @@
 
       const quoteEl = document.getElementById("quote");
       const buttonEl = document.getElementById("newQuoteBtn");
-      const tweetTextEl = document.getElementById("tweetText");
-      const tweetMetaEl = document.getElementById("tweetMeta");
 
       function showRandomQuote() {
         const randomIndex = Math.floor(Math.random() * quotes.length);
         quoteEl.textContent = `“${quotes[randomIndex]}”`;
       }
-
-      async function loadLatestTweet() {
-        try {
-          const res = await fetch("/api/latest-taleb");
-          if (!res.ok) throw new Error("Failed to load post");
-
-          const data = await res.json();
 
           tweetTextEl.textContent = data.text || "No recent post found.";
 
@@ -233,14 +215,15 @@
               : "";
           }
         } catch (err) {
-          tweetTextEl.textContent = "Could not load the latest post right now.";
-          tweetMetaEl.textContent = "";
+          tweetTextEl.textContent = "Request failed.";
+          tweetMetaEl.textContent = err.message;
         }
       }
 
       buttonEl.addEventListener("click", showRandomQuote);
       showRandomQuote();
-      loadLatestTweet();
-    </script>
+
+        </script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   </body>
 </html>
