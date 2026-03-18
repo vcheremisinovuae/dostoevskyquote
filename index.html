@@ -188,9 +188,9 @@
         "The soul is healed by being with children.",
         "What is hell? I maintain that it is the suffering of being unable to love.",
         "Much unhappiness has come into the world because of bewilderment and things left unsaid.",
-        "The best way to keep a prisoner from escaping is to make sure he never knows he is in prison.",
         "Above all, don't lie to yourself.",
-        "Power is given only to him who dares to stoop and take it."
+        "The best way to keep a prisoner from escaping is to make sure he never knows he is in prison.",
+        "Taking a new step, uttering a new word, is what people fear most."
       ];
 
       const quoteEl = document.getElementById("quote");
@@ -201,29 +201,9 @@
         quoteEl.textContent = `“${quotes[randomIndex]}”`;
       }
 
-          tweetTextEl.textContent = data.text || "No recent post found.";
-
-          if (data.url) {
-            tweetMetaEl.innerHTML = `
-              <span>${data.created_at ? new Date(data.created_at).toLocaleString() : ""}</span>
-              ${data.created_at ? " · " : ""}
-              <a class="tweet-link" href="${data.url}" target="_blank" rel="noopener noreferrer">Open on X</a>
-            `;
-          } else {
-            tweetMetaEl.textContent = data.created_at
-              ? new Date(data.created_at).toLocaleString()
-              : "";
-          }
-        } catch (err) {
-          tweetTextEl.textContent = "Request failed.";
-          tweetMetaEl.textContent = err.message;
-        }
-      }
-
       buttonEl.addEventListener("click", showRandomQuote);
       showRandomQuote();
-
-        </script>
+    </script>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   </body>
 </html>
