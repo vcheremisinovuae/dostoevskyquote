@@ -1,6 +1,151 @@
-git init
-git add .
-git commit -m "Add Dostoevsky quote app"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/YOUR-REPO.git
-git push -u origin main
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dostoevsky Quotes</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        font-family: Georgia, "Times New Roman", serif;
+        color: #f5efe3;
+        background:
+          radial-gradient(circle at top, rgba(120, 90, 50, 0.15), transparent 35%),
+          linear-gradient(160deg, #120f0d 0%, #1c1714 45%, #0d0b0a 100%);
+      }
+
+      .card {
+        width: min(760px, 100%);
+        padding: 56px 42px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 28px;
+        background: rgba(28, 22, 18, 0.88);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(6px);
+        text-align: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 14px;
+        font-size: 12px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: #c6a978;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(34px, 6vw, 58px);
+        line-height: 1.05;
+        font-weight: 700;
+      }
+
+      .divider {
+        width: 72px;
+        height: 1px;
+        margin: 26px auto 30px;
+        background: linear-gradient(to right, transparent, rgba(198, 169, 120, 0.95), transparent);
+      }
+
+      #quote {
+        margin: 0;
+        font-size: clamp(24px, 3.4vw, 38px);
+        line-height: 1.55;
+        color: #f7f0e6;
+      }
+
+      #author {
+        margin: 26px 0 0;
+        font-size: 15px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(245, 239, 227, 0.72);
+      }
+
+      button {
+        margin-top: 34px;
+        border: 1px solid rgba(198, 169, 120, 0.45);
+        background: linear-gradient(180deg, #b89460 0%, #8e6a3d 100%);
+        color: #fffaf2;
+        padding: 14px 22px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 15px;
+        font-family: inherit;
+        letter-spacing: 0.04em;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.34);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .footer-note {
+        margin-top: 18px;
+        font-size: 12px;
+        color: rgba(245, 239, 227, 0.45);
+      }
+
+      @media (max-width: 640px) {
+        .card {
+          padding: 38px 22px;
+          border-radius: 22px;
+        }
+
+        #quote {
+          line-height: 1.45;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <p class="eyebrow">Russian Literature</p>
+      <h1>Dostoevsky</h1>
+      <div class="divider"></div>
+      <p id="quote"></p>
+      <p id="author">— Fyodor Dostoevsky</p>
+      <button id="newQuoteBtn">Another quote</button>
+      <p class="footer-note">A quiet corner for restless thoughts.</p>
+    </main>
+
+    <script>
+      const quotes = [
+        "The mystery of human existence lies not in just staying alive, but in finding something to live for.",
+        "To live without hope is to cease to live.",
+        "The soul is healed by being with children.",
+        "What is hell? I maintain that it is the suffering of being unable to love.",
+        "Much unhappiness has come into the world because of bewilderment and things left unsaid.",
+        "The best way to keep a prisoner from escaping is to make sure he never knows he is in prison.",
+        "Above all, don't lie to yourself.",
+        "Power is given only to him who dares to stoop and take it."
+      ];
+
+      const quoteEl = document.getElementById("quote");
+      const buttonEl = document.getElementById("newQuoteBtn");
+
+      function showRandomQuote() {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        quoteEl.textContent = `“${quotes[randomIndex]}”`;
+      }
+
+      buttonEl.addEventListener("click", showRandomQuote);
+      showRandomQuote();
+    </script>
+  </body>
+</html>
