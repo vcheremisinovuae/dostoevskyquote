@@ -95,6 +95,33 @@
         transform: translateY(0);
       }
 
+      .price-section {
+        margin-top: 38px;
+        padding-top: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left;
+      }
+
+      .price-card {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.02);
+        padding: 22px;
+        border-radius: 18px;
+      }
+
+      .price-value {
+        margin: 0;
+        font-size: clamp(28px, 4vw, 42px);
+        line-height: 1.2;
+        color: #f7f0e6;
+      }
+
+      .price-meta {
+        margin-top: 10px;
+        font-size: 13px;
+        color: rgba(245, 239, 227, 0.58);
+      }
+
       .feed-section {
         margin-top: 38px;
         padding-top: 30px;
@@ -164,6 +191,16 @@
       <p id="author">— Fyodor Dostoevsky</p>
       <button id="newQuoteBtn">Another quote</button>
 
+      <section class="price-section">
+        <p class="feed-title">Live crypto</p>
+        <p class="feed-subtitle">Current KASPA price</p>
+        <div class="price-card">
+          <p class="price-label">KAS / USD</p>
+          <p class="price-value" id="kaspaPrice">Loading...</p>
+          <p class="price-meta" id="kaspaMeta">Waiting for market data.</p>
+        </div>
+      </section>
+
       <section class="feed-section">
         <p class="feed-title">Latest from X</p>
         <p class="feed-subtitle">Live timeline from @nntaleb</p>
@@ -194,12 +231,57 @@
 
       const quoteEl = document.getElementById("quote");
       const buttonEl = document.getElementById("newQuoteBtn");
+      const kaspaPriceEl = document.getElementById("kaspaPrice");
+      const kaspaMetaEl = document.getElementById("kaspaMeta");
 
       function showRandomQuote() {
         const randomIndex = Math.floor(Math.random() * quotes.length);
         quoteEl.textContent = `“${quotes[randomIndex]}”`;
       }
 
-      buttonEl.addEventListene src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      async function loadKaspaPrice() {
+        try {
+          const response = await fetch(
+            "https://api.coingecko.com/api/v3/simple/price?ids=kaspa&vs_currencies=usd&include_24hr_change=true&include_last_updated_at=true"
+          );
+
+          if (!response.ok) {
+            throw new Error("Price request failed");
+          }
+
+          const data = await response.json();
+          const kaspa = data.kaspa;
+
+          if (!kaspa || typeof kaspa.usd !== "number") {
+            throw new Error("Price unavailable");
+          }
+
+          kaspaPriceEl.textContent = `$${kaspa.usd.toFixed(4)}`;
+
+          const change = typeof kaspa.usd_24h_change === "number"
+            ? kaspa.usd_24h_change.toFixed(2)
+            : null;
+
+          const updated = kaspa.last_updated_at
+            ? new Date(kaspa.last_updated_at * 1000).toLocaleString()
+            : null;
+
+          kaspaMetaEl.textContent = [
+            change !== null ? `24h: ${change}%` : null,
+            updated ? `Updated: ${updated}` : null
+          ].filter(Boolean).join(" · ") || "Live market data loaded.";
+        } catch (error) {
+          kaspaPriceEl.textContent = "Unavailable";
+          kaspaMetaEl.textContent = "Could not load KASPA price right now.";
+        }
+      }”`;
+      }
+
+      buttonEl.addEventListener("click", showRandomQuote);
+      showRandomQuote();
+      loadKaspaPrice();
+      setInterval(loadKaspaPrice, 60000);
+    </script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
   </body>
 </html>
