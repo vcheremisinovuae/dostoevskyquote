@@ -109,6 +109,14 @@
         border-radius: 18px;
       }
 
+      .price-label {
+        margin: 0 0 12px;
+        font-size: 14px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(245, 239, 227, 0.72);
+      }
+
       .price-value {
         margin: 0;
         font-size: clamp(28px, 4vw, 42px);
@@ -122,39 +130,7 @@
         color: rgba(245, 239, 227, 0.58);
       }
 
-      .feed-section {
-        margin-top: 38px;
-        padding-top: 30px;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        text-align: left;
-      }
-
-      .feed-title {
-        margin: 0 0 8px;
-        font-size: 14px;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        color: #c6a978;
-      }
-
-      .feed-subtitle {
-        margin: 0 0 18px;
-        font-size: 14px;
-        color: rgba(245, 239, 227, 0.68);
-      }
-
-      .tweet-box {
-        border-radius: 18px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        background: rgba(255, 255, 255, 0.02);
-        padding: 22px;
-        min-height: 420px;
-        overflow: hidden;
-      }
-
-      .tweet-box .twitter-timeline {
-        width: 100% !important;
-      }
+      
 
       
 
@@ -201,18 +177,7 @@
         </div>
       </section>
 
-      <section class="feed-section">
-        <p class="feed-title">Latest from X</p>
-        <p class="feed-subtitle">Live timeline from @nntaleb</p>
-        <div class="tweet-box">
-          <a
-            class="twitter-timeline"
-            data-theme="dark"
-            data-height="420"
-            href="https://twitter.com/nntaleb?ref_src=twsrc%5Etfw"
-          >Tweets by nntaleb</a>
-        </div>
-      </section>
+      
 
       <p class="footer-note">A quiet corner for restless thoughts.</p>
     </main>
@@ -274,7 +239,6 @@
           kaspaPriceEl.textContent = "Unavailable";
           kaspaMetaEl.textContent = "Could not load KASPA price right now.";
         }
-      }”`;
       }
 
       buttonEl.addEventListener("click", showRandomQuote);
@@ -282,6 +246,6 @@
       loadKaspaPrice();
       setInterval(loadKaspaPrice, 60000);
     </script>
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    
   </body>
 </html>
